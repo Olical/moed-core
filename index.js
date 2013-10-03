@@ -1,6 +1,4 @@
 var vm = require('vm');
-var fs = require('fs');
-var path = require('path');
 
 /**
  * Modal text editing engine core.
@@ -9,7 +7,6 @@ var path = require('path');
  */
 function MoedCore() {
 	this.context = vm.createContext({});
-	this.sourceFile(path.join(__dirname, 'lib/config.js'));
 }
 
 /**
@@ -20,17 +17,6 @@ function MoedCore() {
  */
 MoedCore.prototype.source = function (code) {
 	vm.runInContext(code, this.context);
-};
-
-/**
- * Does exactly what `source` does, loads JavaScript into the engines context,
- * but must be provided with a file name to read the code from.
- *
- * @param {String} path The file to load and source.
- */
-MoedCore.prototype.sourceFile = function (path) {
-	var code = fs.readFileSync(path);
-	this.source(code);
 };
 
 module.exports = MoedCore;
