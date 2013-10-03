@@ -1,4 +1,5 @@
 var vm = require('vm');
+var events = require('events');
 
 /**
  * Modal text editing engine core.
@@ -6,6 +7,7 @@ var vm = require('vm');
  * @class
  */
 function MoedCore() {
+	this.events = new events.EventEmitter();
 	this.context = vm.createContext({
 		source: this.source.bind(this)
 	});
