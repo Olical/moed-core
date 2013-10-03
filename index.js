@@ -1,5 +1,6 @@
 var vm = require('vm');
 var fs = require('fs');
+var path = require('path');
 
 /**
  * Modal text editing engine core.
@@ -8,6 +9,7 @@ var fs = require('fs');
  */
 function MoedCore() {
 	this.context = vm.createContext({});
+	this.sourceFile(path.join(__dirname, 'lib/config.js'));
 }
 
 MoedCore.prototype.sourceFile = function (path) {
