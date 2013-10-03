@@ -15,3 +15,9 @@ test('source a fle into the context', function (t) {
 	t.strictEqual(engine.context.foo, true, 'foo was set to true');
 	t.strictEqual(engine.context.bar, true, 'bar was set to true');
 });
+
+test('default config is loaded', function (t) {
+	t.plan(1);
+	var engine = new MoedCore();
+	t.strictEqual(engine.context.theAnswerToLifeTheUniverseAndEverything, 42, 'contains the answer to life, the universe and everything.');
+});
