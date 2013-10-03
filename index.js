@@ -7,7 +7,8 @@ var vm = require('vm');
  */
 function MoedCore() {
 	this.curentMode = 'normal';
-	this.currentKeyCombination = '';
+	this.keyCombinationTimeout = 800;
+	this.clearCurrentKeyCombination();
 	this.keyCombinations = {
 		normal: {}
 	};
@@ -50,11 +51,52 @@ MoedCore.prototype.mapKeys = function (keys, mode, target) {
  */
 MoedCore.prototype.handleKey = function (key) {
 	this.currentKeyCombination += key;
-	var matches = this.getPossibleKeyCombinationMatches();
 
-	if (matches.length === 1 && matches.hasOwnProperty(this.currentKeyCombination)) {
-		matches[this.currentKeyCombination]();
+	var matches = this.getPossibleKeyCombinationMatches();
+	var shouldClearCombination = false;
+
+	if (matches.length === 0) {
+		shouldClearCombination = true;
 	}
+	else if (matches.length === 1 && matches.hasOwnProperty(this.currentKeyCombination)) {
+		matches[this.currentKeyCombination]();
+		shouldClearCombination = true;
+	}
+	else if (matches.length >= 1) {
+		if (this.hasExceededCombinationTimeout()) {
+			shouldClearCombination = true;
+		}
+		else {
+			this.previousKeyTime = Date.now();
+		}
+	}
+
+	if (shouldClearCombination) {
+		this.clearCurrentKeyCombination();
+	}
+};
+
+/**
+ * Checks if the key combination has timed out.
+ *
+ * @return {Boolean} True if it has, false if not.
+ */
+MoedCore.prototype.hasExceededCombinationTimeout = function () {
+	if (this.previousKeyTime === null) {
+		return false;
+	}
+
+	var now = Date.now();
+	var delta = now - this.previousKeyTime;
+	return delta > this.keyCombinationTimeout;
+};
+
+/**
+ * Clears the current key combination and any hanging timers.
+ */
+MoedCore.prototype.clearCurrentKeyCombination = function () {
+	this.currentKeyCombination = '';
+	this.previousKeyTime = null;
 };
 
 /**
