@@ -6,7 +6,9 @@ var vm = require('vm');
  * @class
  */
 function MoedCore() {
-	this.context = vm.createContext({});
+	this.context = vm.createContext({
+		source: this.source.bind(this)
+	});
 }
 
 /**
