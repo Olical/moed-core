@@ -9,7 +9,7 @@ test('source a string into the context', function (t) {
 	t.strictEqual(engine.context.foo, true, 'foo was set to true');
 });
 
-test('source a fle into the context', function (t) {
+test('source a file into the context', function (t) {
 	t.plan(2);
 	var engine = new MoedCore();
 	engine.sourceFile(path.join(__dirname, 'config/basic.js'));
