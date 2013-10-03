@@ -1,0 +1,26 @@
+{
+	"name": "moed-core",
+	"version": "0.0.0",
+	"description": "Modal text editing engine",
+	"main": "index.js",
+	"scripts": {
+		"test": "tape tests/*.js"
+	},
+	"keywords": [
+		"vi",
+		"modal",
+		"editor"
+	],
+	"author": {
+		"name": "Oliver Caldwell",
+		"email": "olliec87@gmail.com",
+		"url": "http://oli.me.uk/"
+	},
+	"license": {
+		"type": "Unlicense",
+		"url": "http://unlicense.org/"
+	},
+	"devDependencies": {
+		"tape": "~1.1.1"
+	}
+}
