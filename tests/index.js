@@ -1,4 +1,5 @@
 var test = require('tape');
+var path = require('path');
 var MoedCore = require('..');
 
 test('source a string into the context', function (t) {
@@ -11,7 +12,7 @@ test('source a string into the context', function (t) {
 test('source a fle into the context', function (t) {
 	t.plan(2);
 	var engine = new MoedCore();
-	engine.sourceFile('./tests/config/basic.js');
+	engine.sourceFile(path.join(__dirname, 'config/basic.js'));
 	t.strictEqual(engine.context.foo, true, 'foo was set to true');
 	t.strictEqual(engine.context.bar, true, 'bar was set to true');
 });
