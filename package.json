@@ -21,6 +21,7 @@
 		"url": "http://unlicense.org/"
 	},
 	"devDependencies": {
-		"tape": "~1.1.1"
+		"tape": "~1.1.1",
+		"nodemon": "~0.7.10"
 	}
 }
