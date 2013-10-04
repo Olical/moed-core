@@ -8,7 +8,7 @@ var vm = require('vm');
 function MoedCore() {
 	this.curentMode = 'normal';
 	this.keyCombinationTimeout = 800;
-	this.clearCurrentKeyCombination();
+	this.currentKeyCombination = '';
 	this.keyCombinations = {
 		normal: {}
 	};
@@ -63,40 +63,15 @@ MoedCore.prototype.handleKey = function (key) {
 		shouldClearCombination = true;
 	}
 	else if (matches.length >= 1) {
-		if (this.hasExceededCombinationTimeout()) {
-			shouldClearCombination = true;
-		}
-		else {
-			this.previousKeyTime = Date.now();
-		}
+		clearTimeout(this.keyTimeout);
+		setTimeout(function () {
+			this.currentKeyCombination = '';
+		}.bind(this), this.keyCombinationTimeout);
 	}
 
 	if (shouldClearCombination) {
-		this.clearCurrentKeyCombination();
+		this.currentKeyCombination = '';
 	}
-};
-
-/**
- * Checks if the key combination has timed out.
- *
- * @return {Boolean} True if it has, false if not.
- */
-MoedCore.prototype.hasExceededCombinationTimeout = function () {
-	if (this.previousKeyTime === null) {
-		return false;
-	}
-
-	var now = Date.now();
-	var delta = now - this.previousKeyTime;
-	return delta > this.keyCombinationTimeout;
-};
-
-/**
- * Clears the current key combination and any hanging timers.
- */
-MoedCore.prototype.clearCurrentKeyCombination = function () {
-	this.currentKeyCombination = '';
-	this.previousKeyTime = null;
 };
 
 /**

@@ -92,5 +92,5 @@ test('can let a key combination timeout', function (t) {
 
 	setTimeout(function () {
 		engine.handleKey('<b>');
-	}, 100);
+	}, 60);
 });
