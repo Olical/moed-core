@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 /**
  * Module for managing buffers. These hold file contents and meta data.
  *
@@ -6,7 +8,6 @@
  */
 function Buffers(context) {
 	this._context = context;
-	this._uniqueBufferIdentifier = 0;
 	this._buffers = {};
 	this._lineBreak = '\n';
 }
@@ -18,13 +19,13 @@ function Buffers(context) {
  * @return {Number} The new buffers identifier.
  */
 Buffers.prototype.create = function (initialContent) {
-	this._uniqueBufferIdentifier += 1;
+	var identifier = _.uniqueId();
 
-	this._buffers[this._uniqueBufferIdentifier] = {
+	this._buffers[identifier] = {
 		lines: initialContent.split(this._lineBreak)
 	};
 
-	return this._uniqueBufferIdentifier;
+	return identifier;
 };
 
 /**
