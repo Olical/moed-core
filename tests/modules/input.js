@@ -6,15 +6,15 @@ test('handling a key with an exact match executes the right function', function 
 	var engine = new MoedCore();
 	var i = engine.context.input;
 
-	i.mapKeys('<w>', 'normal', function () {
+	i.map('<w>', 'normal', function () {
 		t.pass('mapping routed through');
 	});
 
-	i.mapKeys('<b>', 'normal', function () {
+	i.map('<b>', 'normal', function () {
 		t.fail('mapping routed through when it should not');
 	});
 
-	i.handleKey('<w>');
+	i.fire('<w>');
 });
 
 test('sending one key when there are other potential matches does not execute', function (t) {
@@ -22,20 +22,20 @@ test('sending one key when there are other potential matches does not execute', 
 	var engine = new MoedCore();
 	var i = engine.context.input;
 
-	i.mapKeys('<w>', 'normal', function () {
+	i.map('<w>', 'normal', function () {
 		t.fail('<w> should do nothing because it is ambiguous');
 	});
 
-	i.mapKeys('<w><b>', 'normal', function () {
+	i.map('<w><b>', 'normal', function () {
 		t.fail('<w><b> should not be executed because this was a single key');
 	});
 
-	i.mapKeys('<b>', 'normal', function () {
+	i.map('<b>', 'normal', function () {
 		t.pass('<b> is the only one that should execute');
 	});
 
-	i.handleKey('<b>');
-	i.handleKey('<w>');
+	i.fire('<b>');
+	i.fire('<w>');
 });
 
 test('can register and use key combinations', function (t) {
@@ -43,20 +43,20 @@ test('can register and use key combinations', function (t) {
 	var engine = new MoedCore();
 	var i = engine.context.input;
 
-	i.mapKeys('<w>', 'normal', function () {
+	i.map('<w>', 'normal', function () {
 		t.fail('<w> should do nothing because it is ambiguous');
 	});
 
-	i.mapKeys('<w><b>', 'normal', function () {
+	i.map('<w><b>', 'normal', function () {
 		t.pass('<w><b> should execute this');
 	});
 
-	i.mapKeys('<b>', 'normal', function () {
+	i.map('<b>', 'normal', function () {
 		t.fail('<b> should not execute when not called');
 	});
 
-	i.handleKey('<w>');
-	i.handleKey('<b>');
+	i.fire('<w>');
+	i.fire('<b>');
 });
 
 test('can let a key combination timeout', function (t) {
@@ -65,21 +65,21 @@ test('can let a key combination timeout', function (t) {
 	var i = engine.context.input;
 	i.timeout = 50;
 
-	i.mapKeys('<w>', 'normal', function () {
+	i.map('<w>', 'normal', function () {
 		t.fail('<w> should do nothing because it is ambiguous');
 	});
 
-	i.mapKeys('<w><b>', 'normal', function () {
+	i.map('<w><b>', 'normal', function () {
 		t.fail('<w><b> should not execute because it times out');
 	});
 
-	i.mapKeys('<b>', 'normal', function () {
+	i.map('<b>', 'normal', function () {
 		t.pass('<b> should execute because the combo times out');
 	});
 
-	i.handleKey('<w>');
+	i.fire('<w>');
 
 	setTimeout(function () {
-		i.handleKey('<b>');
+		i.fire('<b>');
 	}, 60);
 });

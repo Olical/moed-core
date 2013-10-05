@@ -24,7 +24,7 @@ function Input() {
  * @param {String} mode
  * @param {Function} target
  */
-Input.prototype.mapKeys = function (keys, mode, target) {
+Input.prototype.map = function (keys, mode, target) {
 	var combination = typeof keys === 'string' ? keys : keys.join('');
 
 	if (!this.combinations[mode]) {
@@ -41,7 +41,7 @@ Input.prototype.mapKeys = function (keys, mode, target) {
  *
  * @param {String} key The case sensitive key that was pressed.
  */
-Input.prototype.handleKey = function (key) {
+Input.prototype.fire = function (key) {
 	this.currentCombination += key;
 
 	var matches = this.getPossibleKeyCombinationMatches();
