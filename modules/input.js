@@ -1,3 +1,10 @@
+/**
+ * This input module adds key and key combination mapping support. This is the
+ * layer between the actual key presses within the UI and the underlying
+ * engine.
+ *
+ * @class
+ */
 function Input() {
 	this.mode = 'normal';
 	this.timeout = 800;
@@ -9,6 +16,9 @@ function Input() {
 /**
  * Maps the key identifiers as a combination to the target function when
  * running in the specified mode.
+ *
+ * Combinations use the same syntax as Vim, so if you wanted to map someone
+ * pressing control-w and then l to a function, you would use: "<C-w><l>".
  *
  * @param {String} keys
  * @param {String} mode

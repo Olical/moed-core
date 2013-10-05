@@ -16,7 +16,7 @@ function MoedCore() {
 
 /**
  * Executes the provided modules register function and passes it the context
- * object.
+ * object. The module should then add it's namespace(s) to the context.
  *
  * @param {Object} module The module you want to register.
  */
