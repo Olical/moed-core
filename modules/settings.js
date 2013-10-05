@@ -42,11 +42,7 @@ Settings.prototype.get = function (key, target) {
 Settings.prototype.set = function (key, value, target) {
 	var settings = this._resolveTarget(target);
 	settings[key] = value;
-	this._context.events.emitEvent('settings.set', [key, value]);
-	this._context.events.emitEvent([
-		'settings.set',
-		key
-	].join('#'), [value]);
+	this._context.events.emitScopedEvent('settings.set', key, [value]);
 };
 
 /**
