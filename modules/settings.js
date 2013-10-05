@@ -69,7 +69,6 @@ Settings.prototype._resolveTarget = function (target) {
 };
 
 module.exports = {
-	Settings: Settings,
 	register: function (context) {
 		context.settings = new Settings();
 	}
