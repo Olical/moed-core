@@ -21,11 +21,7 @@ Buffers.prototype.create = function (initialContent) {
 	this._uniqueBufferIdentifier += 1;
 
 	this._buffers[this._uniqueBufferIdentifier] = {
-		lines: initialContent.split(this._lineBreak),
-		cursor: {
-			column: 0,
-			line: 0
-		}
+		lines: initialContent.split(this._lineBreak)
 	};
 
 	return this._uniqueBufferIdentifier;
