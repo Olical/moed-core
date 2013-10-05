@@ -68,3 +68,20 @@ test('can remove a listener', function (t) {
 	e.emitEvent('foo');
 	e.emitEvent('bar');
 });
+
+test('can emit using the scoped event helper', function (t) {
+	t.plan(3);
+	var engine = new MoedCore();
+	var e = engine.context.events;
+
+	e.addListener('foo', function (key, value) {
+		t.strictEqual(key, 'bar', 'the key is correct');
+		t.strictEqual(value, 100, 'the payload is correct');
+	});
+
+	e.addListener('foo#bar', function (value) {
+		t.strictEqual(value, 100, 'the payload is correct');
+	});
+
+	e.emitScopedEvent('foo', 'bar', [100]);
+});

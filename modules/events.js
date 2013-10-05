@@ -50,6 +50,29 @@ Events.prototype.emitEvent = function (event, args, scope) {
 };
 
 /**
+ * This is a helper for emitEvent. It makes it easier to emit an event with a
+ * key and some values when you want the key to be part of the event.
+ *
+ * First, it will emit the event name and pass the key as the first argument
+ * with the normal values following after. Then it will emit another event
+ * where the key is appended onto the event name with a hash.
+ *
+ * This allows users to listen to certain sub-sets of events.
+ *
+ * @param {String} event Name of the event to emit.
+ * @param {String} key The key to first emit as part of the arguments and then as part of the event name.
+ * @param {*[]} [args] List of arguments to apply to the listeners.
+ * @param {Object} [scope] The object that the listener will have it's `this` object set to.
+ */
+Events.prototype.emitScopedEvent = function (event, key, args, scope) {
+	this.emitEvent(event, [key].concat(args), scope);
+	this.emitEvent([
+		event,
+		key
+	].join('#'), args, scope);
+};
+
+/**
  * Removes the listener from the specified event.
  *
  * @param {String} event Name of the event to remove from.
