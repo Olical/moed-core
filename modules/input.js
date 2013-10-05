@@ -47,27 +47,44 @@ Input.prototype.map = function (keys, mode, target) {
  */
 Input.prototype.fire = function (key) {
 	this._currentCombination += key;
-
 	var matches = this._getPossibleKeyCombinationMatches();
-	var shouldClearCombination = false;
 
 	if (matches.length === 0) {
-		shouldClearCombination = true;
+		this._clearCombination();
 	}
 	else if (matches.length === 1 && matches.hasOwnProperty(this._currentCombination)) {
 		matches[this._currentCombination]();
-		shouldClearCombination = true;
+		this._clearCombination();
 	}
 	else if (matches.length >= 1) {
-		clearTimeout(this._timeoutHandle);
-		this._timeoutHandle = setTimeout(function () {
-			this._currentCombination = '';
-			this._timeoutHandle = null;
-		}.bind(this), this._context.settings.get('input.timeout'));
+		this._updateTimeout();
 	}
+};
 
-	if (shouldClearCombination) {
-		this._currentCombination = '';
+/**
+ * Clears the current key combination.
+ */
+Input.prototype._clearCombination = function () {
+	this._currentCombination = '';
+	this._clearTimeout();
+};
+
+/**
+ * Updates the combination reset timeout.
+ */
+Input.prototype._updateTimeout = function () {
+	var timeout = this._context.settings.get('input.timeout');
+	this._clearTimeout();
+	this._timeoutHandle = setTimeout(this._clearCombination.bind(this), timeout);
+};
+
+/**
+ * Clears the current combination timeout.
+ */
+Input.prototype._clearTimeout = function () {
+	if (this._timeoutHandle !== null) {
+		clearTimeout(this._timeoutHandle);
+		this._timeoutHandle = null;
 	}
 };
 
