@@ -70,7 +70,7 @@ Settings.prototype._resolveTarget = function (target) {
 
 module.exports = {
 	Settings: Settings,
-	create: function (context) {
+	register: function (context) {
 		context.settings = new Settings();
 	}
 };

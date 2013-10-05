@@ -17,7 +17,19 @@ function MoedCore() {
 		source: this.source.bind(this),
 		mapKeys: this.mapKeys.bind(this)
 	});
+
+	this.registerModule(require('./modules/settings.js'));
 }
+
+/**
+ * Executes the provided modules register function and passes it the context
+ * object.
+ *
+ * @param {Object} module The module you want to register.
+ */
+MoedCore.prototype.registerModule = function (module) {
+	module.register(this.context);
+};
 
 /**
  * Parses the provided JavaScript in the engine's context. It allows it to

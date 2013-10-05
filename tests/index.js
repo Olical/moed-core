@@ -1,6 +1,13 @@
 var test = require('tape');
 var MoedCore = require('..');
 
+test('can load a module', function (t) {
+	t.plan(1);
+	var engine = new MoedCore();
+	engine.registerModule(require('./stubs/basic-module.js'));
+	t.strictEqual(engine.context.main.id, true, 'loaded and created the module');
+});
+
 test('source a string into the context', function (t) {
 	t.plan(1);
 	var engine = new MoedCore();
