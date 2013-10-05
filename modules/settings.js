@@ -32,6 +32,9 @@ Settings.prototype.get = function (key, target) {
  * Sets a key in the settings to the specified value with an optional target
  * context.
  *
+ * Emits the "settings.set" event and "settings.set#{KEY}". The normal event is
+ * passed the key and value, the key specific event is only passed the value.
+ *
  * @param {String} key Dot delimited object path for the setting.
  * @param {*} value This is what will be set.
  * @param {String} [target] Optional context for the setting, defaults to "default".
@@ -39,6 +42,11 @@ Settings.prototype.get = function (key, target) {
 Settings.prototype.set = function (key, value, target) {
 	var settings = this._resolveTarget(target);
 	settings[key] = value;
+	this._context.events.emitEvent('settings.set', [key, value]);
+	this._context.events.emitEvent([
+		'settings.set',
+		key
+	].join('#'), [value]);
 };
 
 /**
