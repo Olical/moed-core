@@ -8,8 +8,8 @@
  */
 function Input(context) {
 	this._context = context;
+	context.settings.set('input.timeout', 800);
 	this.mode = 'normal';
-	this.timeout = 800;
 	this.currentCombination = '';
 	this.combinations = {};
 	this.timeoutHandle = null;
@@ -61,7 +61,7 @@ Input.prototype.fire = function (key) {
 		this.timeoutHandle = setTimeout(function () {
 			this.currentCombination = '';
 			this.timeoutHandle = null;
-		}.bind(this), this.timeout);
+		}.bind(this), this._context.settings.get('input.timeout'));
 	}
 
 	if (shouldClearCombination) {

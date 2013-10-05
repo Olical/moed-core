@@ -63,7 +63,7 @@ test('can let a key combination timeout', function (t) {
 	t.plan(1);
 	var engine = new MoedCore();
 	var i = engine.context.input;
-	i.timeout = 50;
+	engine.context.settings.set('input.timeout', 50);
 
 	i.map('<w>', 'normal', function () {
 		t.fail('<w> should do nothing because it is ambiguous');
