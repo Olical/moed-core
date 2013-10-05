@@ -3,9 +3,11 @@
  * string to add context aware overrides. This allows you to set a global
  * setting or an override for, say, a file type.
  *
+ * @param {Object} context Current context object. Allows bridging between modules.
  * @class
  */
-function Settings() {
+function Settings(context) {
+	this._context = context;
 	this._settings = {};
 }
 
@@ -70,6 +72,6 @@ Settings.prototype._resolveTarget = function (target) {
 
 module.exports = {
 	register: function (context) {
-		context.settings = new Settings();
+		context.settings = new Settings(context);
 	}
 };

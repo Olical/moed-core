@@ -3,9 +3,11 @@
  * layer between the actual key presses within the UI and the underlying
  * engine.
  *
+ * @param {Object} context Current context object. Allows bridging between modules.
  * @class
  */
-function Input() {
+function Input(context) {
+	this._context = context;
 	this.mode = 'normal';
 	this.timeout = 800;
 	this.currentCombination = '';
@@ -99,6 +101,6 @@ Input.prototype.getPossibleKeyCombinationMatches = function () {
 
 module.exports = {
 	register: function (context) {
-		context.input = new Input();
+		context.input = new Input(context);
 	}
 };
