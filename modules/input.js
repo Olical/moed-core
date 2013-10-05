@@ -8,11 +8,13 @@
  */
 function Input(context) {
 	this._context = context;
+
 	context.settings.set('input.timeout', 800);
-	this.mode = 'normal';
-	this.currentCombination = '';
-	this.combinations = {};
-	this.timeoutHandle = null;
+
+	this._mode = 'normal';
+	this._currentCombination = '';
+	this._combinations = {};
+	this._timeoutHandle = null;
 }
 
 /**
@@ -29,11 +31,11 @@ function Input(context) {
 Input.prototype.map = function (keys, mode, target) {
 	var combination = typeof keys === 'string' ? keys : keys.join('');
 
-	if (!this.combinations[mode]) {
-		this.combinations[mode] = {};
+	if (!this._combinations[mode]) {
+		this._combinations[mode] = {};
 	}
 
-	this.combinations[mode][combination] = target;
+	this._combinations[mode][combination] = target;
 };
 
 /**
@@ -44,28 +46,28 @@ Input.prototype.map = function (keys, mode, target) {
  * @param {String} key The case sensitive key that was pressed.
  */
 Input.prototype.fire = function (key) {
-	this.currentCombination += key;
+	this._currentCombination += key;
 
-	var matches = this.getPossibleKeyCombinationMatches();
+	var matches = this._getPossibleKeyCombinationMatches();
 	var shouldClearCombination = false;
 
 	if (matches.length === 0) {
 		shouldClearCombination = true;
 	}
-	else if (matches.length === 1 && matches.hasOwnProperty(this.currentCombination)) {
-		matches[this.currentCombination]();
+	else if (matches.length === 1 && matches.hasOwnProperty(this._currentCombination)) {
+		matches[this._currentCombination]();
 		shouldClearCombination = true;
 	}
 	else if (matches.length >= 1) {
-		clearTimeout(this.timeoutHandle);
-		this.timeoutHandle = setTimeout(function () {
-			this.currentCombination = '';
-			this.timeoutHandle = null;
+		clearTimeout(this._timeoutHandle);
+		this._timeoutHandle = setTimeout(function () {
+			this._currentCombination = '';
+			this._timeoutHandle = null;
 		}.bind(this), this._context.settings.get('input.timeout'));
 	}
 
 	if (shouldClearCombination) {
-		this.currentCombination = '';
+		this._currentCombination = '';
 	}
 };
 
@@ -80,16 +82,16 @@ Input.prototype.fire = function (key) {
  *
  * @return {Object} Map of matched key combinations for the current keys with a length.
  */
-Input.prototype.getPossibleKeyCombinationMatches = function () {
+Input.prototype._getPossibleKeyCombinationMatches = function () {
 	var matches = {
 		length: 0
 	};
-	var candidates = this.combinations[this.mode];
+	var candidates = this._combinations[this._mode];
 	var combination;
 
 	for (combination in candidates) {
 		if (candidates.hasOwnProperty(combination)) {
-			if (combination.indexOf(this.currentCombination) === 0) {
+			if (combination.indexOf(this._currentCombination) === 0) {
 				matches[combination] = candidates[combination];
 				matches.length += 1;
 			}
