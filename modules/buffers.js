@@ -8,6 +8,7 @@ function Buffers(context) {
 	this._context = context;
 	this._uniqueBufferIdentifier = 0;
 	this._buffers = {};
+	this._lineBreak = '\n';
 }
 
 /**
@@ -20,10 +21,10 @@ Buffers.prototype.create = function (initialContent) {
 	this._uniqueBufferIdentifier += 1;
 
 	this._buffers[this._uniqueBufferIdentifier] = {
-		content: initialContent,
+		lines: initialContent.split(this._lineBreak),
 		cursor: {
-			x: 0,
-			y: 0
+			column: 0,
+			line: 0
 		}
 	};
 
@@ -31,13 +32,14 @@ Buffers.prototype.create = function (initialContent) {
 };
 
 /**
- * Fetches a buffer object by it's identifier.
+ * Fetches the content from a buffer as a single string.
  *
  * @param {Number} identifier Identification number of your desired buffer.
- * @return {Object} The requested buffer.
+ * @return {String} The buffers contents.
  */
-Buffers.prototype.get = function (identifier) {
-	return this._buffers[identifier];
+Buffers.prototype.getContent = function (identifier) {
+	var buffer = this._buffers[identifier];
+	return buffer.lines.join(this._lineBreak);
 };
 
 module.exports = {
