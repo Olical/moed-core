@@ -10,6 +10,7 @@ function MoedCore() {
 		source: this.source.bind(this)
 	});
 
+	this.registerModule(require('./modules/events.js'));
 	this.registerModule(require('./modules/settings.js'));
 	this.registerModule(require('./modules/input.js'));
 }
