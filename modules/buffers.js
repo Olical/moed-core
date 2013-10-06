@@ -19,7 +19,7 @@ function Buffers(context) {
  * @return {String} The new buffers identifier.
  */
 Buffers.prototype.create = function (initialContent) {
-	var identifier = _.uniqueId();
+	var identifier = _.uniqueId('buffer_');
 
 	this._buffers[identifier] = {
 		lines: initialContent.split(this._lineBreak)
