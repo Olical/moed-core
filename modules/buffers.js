@@ -9,7 +9,6 @@ var _ = require('lodash');
 function Buffers(context) {
 	this._context = context;
 	this._buffers = {};
-	this._lineBreak = '\n';
 }
 
 /**
@@ -22,21 +21,20 @@ Buffers.prototype.create = function (initialContent) {
 	var identifier = _.uniqueId('buffer_');
 
 	this._buffers[identifier] = {
-		lines: initialContent.split(this._lineBreak)
+		lines: initialContent.split('\n')
 	};
 
 	return identifier;
 };
 
 /**
- * Fetches the content from a buffer as a single string.
+ * Fetches the buffer object by identifier.
  *
  * @param {String} identifier Identification key for your desired buffer.
- * @return {String} The buffers contents.
+ * @return {Object} The buffer object you requested.
  */
-Buffers.prototype.getContent = function (identifier) {
-	var buffer = this._buffers[identifier];
-	return buffer.lines.join(this._lineBreak);
+Buffers.prototype.get = function (identifier) {
+	return this._buffers[identifier];
 };
 
 module.exports = {
