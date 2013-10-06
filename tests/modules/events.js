@@ -23,7 +23,7 @@ test('can pass arguments to a listener', function (t) {
 	var e = engine.context.events;
 
 	e.addListener('foo', function (payload) {
-		t.strictEqual(payload, true);
+		t.strictEqual(payload, true, 'payload is correct');
 	});
 
 	e.emitEvent('foo', [true]);
@@ -36,7 +36,7 @@ test('can set the scope', function (t) {
 	var scope = {payload: true};
 
 	e.addListener('foo', function () {
-		t.strictEqual(this, scope);
+		t.strictEqual(this, scope, 'scope is correct');
 	});
 
 	e.emitEvent('foo', [], scope);
