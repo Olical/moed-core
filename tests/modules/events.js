@@ -85,3 +85,21 @@ test('can emit using the scoped event helper', function (t) {
 
 	e.emitScopedEvent('foo', 'bar', [100]);
 });
+
+test('returning -1 removes the listener', function (t) {
+	t.plan(3);
+	var engine = new MoedCore();
+	var e = engine.context.events;
+
+	e.addListener('foo', function () {
+		t.pass('returns -1, so only called once');
+		return -1;
+	});
+
+	e.addListener('foo', function () {
+		t.pass('does not return -1 so it is called twice');
+	});
+
+	e.emitEvent('foo');
+	e.emitEvent('foo');
+});

@@ -29,7 +29,8 @@ Events.prototype.addListener = function (event, listener) {
  * attached to that event. You can also provide a list of arguments to be given
  * to each listener.
  *
- * And you can set the `this` object for each listener if you so choose.
+ * And you can set the `this` object for each listener if you so choose. If the
+ * listener returns -1 then it will be automatically removed.
  *
  * @param {String} event Name of the event to emit.
  * @param {*[]} [args] List of arguments to apply to the listeners.
@@ -44,7 +45,10 @@ Events.prototype.emitEvent = function (event, args, scope) {
 		length = listeners.length;
 
 		for (i = 0; i < length; i++) {
-			listeners[i].apply(scope, args);
+			if (listeners[i].apply(scope, args) === -1) {
+				this.removeListener(event, listeners[i--]);
+				length--;
+			}
 		}
 	}
 };
