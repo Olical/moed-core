@@ -14,6 +14,7 @@ function MoedCore() {
 	this.registerModule(require('./modules/settings.js'));
 	this.registerModule(require('./modules/input.js'));
 	this.registerModule(require('./modules/buffers.js'));
+	this.registerModule(require('./modules/windows.js'));
 }
 
 /**
