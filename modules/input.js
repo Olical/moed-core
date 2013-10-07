@@ -10,8 +10,8 @@ function Input(context) {
 	this._context = context;
 
 	context.settings.set('input.timeout', 800);
+	context.settings.set('input.mode', 'normal');
 
-	this._mode = 'normal';
 	this._currentCombination = '';
 	this._combinations = {};
 	this._timeoutHandle = null;
@@ -103,7 +103,7 @@ Input.prototype._getPossibleKeyCombinationMatches = function () {
 	var matches = {
 		length: 0
 	};
-	var candidates = this._combinations[this._mode];
+	var candidates = this._combinations[this._context.settings.get('input.mode')];
 	var combination;
 
 	for (combination in candidates) {
