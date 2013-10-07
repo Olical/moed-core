@@ -8,114 +8,107 @@
  */
 function Input(context) {
 	this._context = context;
+	this._mappings = {};
 
-	context.settings.set('input.timeout', 800);
+	context.events.addListener('settings.set#input.mode', this._clearCurrentMapping.bind(this));
 	context.settings.set('input.mode', 'normal');
-
-	this._currentCombination = '';
-	this._combinations = {};
-	this._timeoutHandle = null;
 }
 
 /**
- * Maps the key identifiers as a combination to the target function when
- * running in the specified mode.
+ * Maps a key combination.
  *
- * Combinations use the same syntax as Vim, so if you wanted to map someone
- * pressing control-w and then l to a function, you would use: "<C-w><l>".
- *
- * @param {String} keys
- * @param {String} mode
- * @param {Function} target
+ * @param {String} keys Combination to trigger the mapping.
+ * @param {String} mode The input mode it is restricted to. (normal, for example)
+ * @param {String} type The type of the mapping. (command or motion for example)
+ * @param {Object} properties Base object to create the mapping with.
+ * @param {Function} properties.target The method that the command should invoke.
+ * @param {Boolean} [properties.acceptsCount] If the command can be prefixed with a count. (defaults to true)
+ * @param {String} [properties.acceptsMapping] An optional type of mapping that can follow this mapping. (motion for example, so you can run "delete word")
  */
-Input.prototype.map = function (keys, mode, target) {
-	var combination = typeof keys === 'string' ? keys : keys.join('');
+Input.prototype.map = function (keys, mode, type, properties) {
+	var mappings = this._getMappings(mode, type);
+	var acceptsCount = true;
 
-	if (!this._combinations[mode]) {
-		this._combinations[mode] = {};
+	if (properties.hasOwnProperty('acceptsCount')) {
+		acceptsCount = properties.acceptsCount;
 	}
 
-	this._combinations[mode][combination] = target;
+	mappings[keys] = {
+		target: properties.target,
+		acceptsCount: acceptsCount,
+		acceptsMapping: properties.acceptsMapping || false
+	};
 };
 
 /**
- * Handles key events. These are used to assign key combinations to functions.
- * The key names work the same as Vim, so <Esc> is escape, <C-a> is control+a,
- * <s> is s, and <W> is shift+w.
+ * Fires a key off and parses it's meaning in context.
  *
- * @param {String} key The case sensitive key that was pressed.
+ * @param {String} key
  */
 Input.prototype.fire = function (key) {
-	this._currentCombination += key;
-	var matches = this._getPossibleKeyCombinationMatches();
+	var current = this._current;
+	current.keys += key;
+	var matches = this._getMatchedMappings();
 
-	if (matches.length === 0) {
-		this._clearCombination();
+	if (matches.exact) {
+		current.matches.push(matches.exact);
 	}
-	else if (matches.length === 1 && matches.hasOwnProperty(this._currentCombination)) {
-		matches[this._currentCombination]();
-		this._clearCombination();
-	}
-	else if (matches.length >= 1) {
-		this._updateTimeout();
+	else if (matches.possible.length === 0) {
+		this._clearCurrentMapping();
 	}
 };
 
 /**
- * Clears the current key combination.
- */
-Input.prototype._clearCombination = function () {
-	this._currentCombination = '';
-	this._clearTimeout();
-};
-
-/**
- * Updates the combination reset timeout.
- */
-Input.prototype._updateTimeout = function () {
-	var timeout = this._context.settings.get('input.timeout');
-	this._clearTimeout();
-	this._timeoutHandle = setTimeout(this._clearCombination.bind(this), timeout);
-};
-
-/**
- * Clears the current combination timeout.
- */
-Input.prototype._clearTimeout = function () {
-	if (this._timeoutHandle !== null) {
-		clearTimeout(this._timeoutHandle);
-		this._timeoutHandle = null;
-	}
-};
-
-/**
- * Creates an object of possible key combination matches from the current key
- * combination and the key combinations map. It returns a new map only
- * containing those that are either a complete match or a potential match which
- * requires more key presses.
+ * Fetches matching, or potentially matching mappings, for the current
+ * progressing mapping. Returns an object containing `exact` (either an
+ * object on exact match, or false if not) and the `possible` array
+ * which contains future possible matches.
  *
- * The map also contains a length property to save you counting them. You can
- * use this to work out if you have an exact hit or a complete miss.
- *
- * @return {Object} Map of matched key combinations for the current keys with a length.
+ * @return {Object} An object containing the `possible` array and an `exact` object. (if there is one)
  */
-Input.prototype._getPossibleKeyCombinationMatches = function () {
-	var matches = {
-		length: 0
+Input.prototype._getMatchedMappings = function () {
+	var result = {
+		exact: false,
+		possible: []
 	};
-	var candidates = this._combinations[this._context.settings.get('input.mode')];
-	var combination;
 
-	for (combination in candidates) {
-		if (candidates.hasOwnProperty(combination)) {
-			if (combination.indexOf(this._currentCombination) === 0) {
-				matches[combination] = candidates[combination];
-				matches.length += 1;
-			}
-		}
+	return result;
+};
+
+/**
+ * Fetches the mappings for a specific mode and type of mapping.
+ *
+ * @param {String} mode The input mode it is restricted to. (normal, for example)
+ * @param {String} type The type of the mapping. (command or motion for example)
+ * @return {Object} Your desired mapping object.
+ */
+Input.prototype._getMappings = function (mode, type) {
+	var types = this._mappings[mode];
+	var mappings;
+
+	if (!types) {
+		types = this._mappings[mode] = {};
 	}
 
-	return matches;
+	mappings = types[type];
+
+	if (!mappings) {
+		mappings = types[type] = {};
+	}
+
+	return mappings;
+};
+
+/**
+ * Resets the current mapping attempt.
+ */
+Input.prototype._clearCurrentMapping = function () {
+	this._current = {
+		mode: this._context.settings.get('input.mode'),
+		type: 'command',
+		keys: '',
+		matches: []
+	};
 };
 
 module.exports = {

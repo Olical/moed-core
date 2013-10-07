@@ -6,12 +6,16 @@ test('handling a key with an exact match executes the right function', function 
 	var engine = new MoedCore();
 	var i = engine.context.input;
 
-	i.map('<w>', 'normal', function () {
-		t.pass('mapping routed through');
+	i.map('<w>', 'normal', 'command', {
+		target: function () {
+			t.pass('mapping routed through');
+		}
 	});
 
-	i.map('<b>', 'normal', function () {
-		t.fail('mapping routed through when it should not');
+	i.map('<b>', 'normal', 'command', {
+		target: function () {
+			t.fail('mapping routed through when it should not');
+		}
 	});
 
 	i.fire('<w>');
@@ -22,16 +26,22 @@ test('sending one key when there are other potential matches does not execute', 
 	var engine = new MoedCore();
 	var i = engine.context.input;
 
-	i.map('<w>', 'normal', function () {
-		t.fail('<w> should do nothing because it is ambiguous');
+	i.map('<w>', 'normal', 'command', {
+		target: function () {
+			t.fail('<w> should do nothing because it is ambiguous');
+		}
 	});
 
-	i.map('<w><b>', 'normal', function () {
-		t.fail('<w><b> should not be executed because this was a single key');
+	i.map('<w><b>', 'normal', 'command', {
+		target: function () {
+			t.fail('<w><b> should not be executed because this was a single key');
+		}
 	});
 
-	i.map('<b>', 'normal', function () {
-		t.pass('<b> is the only one that should execute');
+	i.map('<b>', 'normal', 'command', {
+		target: function () {
+			t.pass('<b> is the only one that should execute');
+		}
 	});
 
 	i.fire('<b>');
@@ -43,16 +53,22 @@ test('can register and use key combinations', function (t) {
 	var engine = new MoedCore();
 	var i = engine.context.input;
 
-	i.map('<w>', 'normal', function () {
-		t.fail('<w> should do nothing because it is ambiguous');
+	i.map('<w>', 'normal', 'command', {
+		target: function () {
+			t.fail('<w> should do nothing because it is ambiguous');
+		}
 	});
 
-	i.map('<w><b>', 'normal', function () {
-		t.pass('<w><b> should execute this');
+	i.map('<w><b>', 'normal', 'command', {
+		target: function () {
+			t.pass('<w><b> should execute this');
+		}
 	});
 
-	i.map('<b>', 'normal', function () {
-		t.fail('<b> should not execute when not called');
+	i.map('<b>', 'normal', 'command', {
+		target: function () {
+			t.fail('<b> should not execute when not called');
+		}
 	});
 
 	i.fire('<w>');
@@ -65,16 +81,22 @@ test('can let a key combination timeout', function (t) {
 	var i = engine.context.input;
 	engine.context.settings.set('input.timeout', 50);
 
-	i.map('<w>', 'normal', function () {
-		t.fail('<w> should do nothing because it is ambiguous');
+	i.map('<w>', 'normal', 'command', {
+		target: function () {
+			t.fail('<w> should do nothing because it is ambiguous');
+		}
 	});
 
-	i.map('<w><b>', 'normal', function () {
-		t.fail('<w><b> should not execute because it times out');
+	i.map('<w><b>', 'normal', 'command', {
+		target: function () {
+			t.fail('<w><b> should not execute because it times out');
+		}
 	});
 
-	i.map('<b>', 'normal', function () {
-		t.pass('<b> should execute because the combo times out');
+	i.map('<b>', 'normal', 'command', {
+		target: function () {
+			t.pass('<b> should execute because the combo times out');
+		}
 	});
 
 	i.fire('<w>');
