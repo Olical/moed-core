@@ -52,6 +52,7 @@ Input.prototype.fire = function (key) {
 
 	if (matches.exact) {
 		current.matches.push(matches.exact);
+		matches.exact.target();
 	}
 	else if (matches.possible.length === 0) {
 		this._clearCurrentMapping();
@@ -64,15 +65,60 @@ Input.prototype.fire = function (key) {
  * object on exact match, or false if not) and the `possible` array
  * which contains future possible matches.
  *
- * @return {Object} An object containing the `possible` array and an `exact` object. (if there is one)
+ * @return {Object} An object containing the `possible` array-like object and an `exact` object. (if there is one)
  */
 Input.prototype._getMatchedMappings = function () {
+	var current = this._current;
+	var mappings = this._getMappings(current.mode, current.type);
+	var parsed = this._parseCurrentKeys();
 	var result = {
 		exact: false,
-		possible: []
+		possible: {
+			length: 0
+		}
 	};
+	var key;
+	var mapping;
+	var match;
+
+	for (key in mappings) {
+		if (mappings.hasOwnProperty(key) && key.indexOf(parsed.keys) === 0) {
+			mapping = mappings[key];
+
+			if (parsed.count === false || mapping.acceptsCount) {
+				result.possible[key] = mapping;
+				result.possible.length++;
+				match = key;
+			}
+		}
+	}
+
+	if (result.possible.length === 1 && parsed.keys === match) {
+		result.exact = result.possible[match];
+	}
 
 	return result;
+};
+
+/**
+ * Precompiled regular expression that extracts the count and key string from a
+ * key combination.
+ *
+ * @type {RegExp}
+ */
+Input.prototype._keyExpression = /(\d*)(<\w+>)+/;
+
+/**
+ * Parses the current key string to extract the counts and actual keys.
+ *
+ * @return {Object} Contains the real `keys` string and a `count` which defaults to false.
+ */
+Input.prototype._parseCurrentKeys = function () {
+	var matches = this._current.keys.match(this._keyExpression);
+	return {
+		count: matches[1] || false,
+		keys: matches[2]
+	};
 };
 
 /**
