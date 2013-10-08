@@ -28,22 +28,22 @@ test('sending one key when there are other potential matches does not execute', 
 
 	i.map('<w>', 'normal', 'command', {
 		target: function () {
-			t.fail('<w> should do nothing because it is ambiguous');
+			t.fail('<w> should not execute, it is ambiguous');
 		}
 	});
 
 	i.map('<w><b>', 'normal', 'command', {
 		target: function () {
-			t.fail('<w><b> should not be executed because this was a single key');
+			t.pass('<w><b> should execute, it is an exact match');
 		}
 	});
 
 	i.map('<b>', 'normal', 'command', {
 		target: function () {
-			t.pass('<b> is the only one that should execute');
+			t.fail('<b> should not execute, <b> is never used at the start of the combo');
 		}
 	});
 
-	i.fire('<b>');
 	i.fire('<w>');
+	i.fire('<b>');
 });
