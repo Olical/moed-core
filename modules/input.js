@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 /**
  * This input module adds key and key combination mapping support. This is the
  * layer between the actual key presses within the UI and the underlying
@@ -51,12 +53,52 @@ Input.prototype.fire = function (key) {
 	var matches = this._getMatchedMappings();
 
 	if (matches.exact) {
-		current.matches.push(matches.exact);
-		matches.exact.target();
+		current.matches.push(matches);
+
+		if (matches.exact.acceptsMapping) {
+			this._prepareForNextSection();
+		}
+		else {
+			this._executeCurrentMapping();
+		}
 	}
 	else if (matches.possible.length === 0) {
 		this._clearCurrentMapping();
 	}
+};
+
+/**
+ * Prepares the current mapping for the next section.
+ */
+Input.prototype._prepareForNextSection = function () {
+	var current = this._current;
+	current.keys = '';
+	current.type = _.last(current.matches).acceptsMapping;
+};
+
+/**
+ * Executes the current mapping the correct number of times. When done, it will
+ * clean up and reset so it is ready for the next mapping.
+ */
+Input.prototype._executeCurrentMapping = function () {
+	var current = this._current;
+	var matches = current.matches;
+	var previousResponse;
+	var match;
+	var i;
+
+	while ((match = matches.pop())) {
+		if (match.exact.acceptsCount && match.parsed.count) {
+			for (i = 0; i < match.parsed.count; i++) {
+				previousResponse = match.exact.target(previousResponse);
+			}
+		}
+		else {
+			previousResponse = match.exact.target(previousResponse);
+		}
+	}
+
+	this._clearCurrentMapping();
 };
 
 /**
@@ -75,7 +117,8 @@ Input.prototype._getMatchedMappings = function () {
 		exact: false,
 		possible: {
 			length: 0
-		}
+		},
+		parsed: parsed
 	};
 	var key;
 	var mapping;
@@ -106,7 +149,7 @@ Input.prototype._getMatchedMappings = function () {
  *
  * @type {RegExp}
  */
-Input.prototype._keyExpression = /(\d*)((<\w+>)+)/;
+Input.prototype._keyExpression = /(\d*)((<\w+>)*)/;
 
 /**
  * Parses the current key string to extract the counts and actual keys.
