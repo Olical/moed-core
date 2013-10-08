@@ -115,9 +115,12 @@ Input.prototype._keyExpression = /(\d*)((<\w+>)+)/;
  */
 Input.prototype._parseCurrentKeys = function () {
 	var matches = this._current.keys.match(this._keyExpression);
+	var count = parseInt(matches[1], 10);
+	var keys = matches[2];
+
 	return {
-		count: matches[1] || false,
-		keys: matches[2]
+		count: isNaN(count) ? false : count,
+		keys: keys
 	};
 };
 
