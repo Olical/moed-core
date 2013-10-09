@@ -83,19 +83,16 @@ Input.prototype._prepareForNextSection = function () {
 Input.prototype._executeCurrentMapping = function () {
 	var current = this._current;
 	var matches = current.matches;
-	var previousResponse;
+	var i = matches.length;
+	var currentPartial;
+	var previousPartial;
 	var match;
-	var i;
 
-	while ((match = matches.pop())) {
-		if (match.exact.acceptsCount && match.parsed.count) {
-			for (i = 0; i < match.parsed.count; i++) {
-				previousResponse = match.exact.target(previousResponse);
-			}
-		}
-		else {
-			previousResponse = match.exact.target(previousResponse);
-		}
+	while (i--) {
+		match = matches[i];
+		currentPartial = _.partial(match.exact.target, match.parsed.count, previousPartial);
+		currentPartial();
+		previousPartial = currentPartial;
 	}
 
 	this._clearCurrentMapping();
