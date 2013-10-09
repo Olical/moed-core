@@ -48,23 +48,21 @@ test('sending one key when there are other potential matches does not execute', 
 	i.fire('<b>');
 });
 
-test('passing a count before a command will execute it that many times', function (t) {
+test('passing a count before a command will execute it with that count', function (t) {
 	t.plan(1);
 	var engine = new MoedCore();
 	var i = engine.context.input;
-	var count = 0;
 
 	i.map('<w>', 'normal', 'command', {
-		target: function () {
-			count++;
+		target: function (count) {
+			t.strictEqual(count, 105, 'the mapping was executed with the correct count');
 		}
 	});
 
 	i.fire('1');
 	i.fire('0');
+	i.fire('5');
 	i.fire('<w>');
-
-	t.strictEqual(count, 10, 'the mapping was executed n times');
 });
 
 test('passing a count to a mapping tha does not take one will not execute', function (t) {
