@@ -58,7 +58,7 @@ Input.prototype.fire = function (key) {
 		if (matches.exact.acceptsMapping) {
 			this._prepareForNextSection();
 
-			if (matches.possible.length === 0) {
+			if (matches.wasAmbiguous) {
 				this.fire(key);
 			}
 		}
@@ -151,6 +151,7 @@ Input.prototype._getMatchedMappings = function () {
 	}
 	else if (result.possible.length === 0 && current.possibleChain) {
 		result.exact = current.possibleChain;
+		result.wasAmbiguous = true;
 		current.possibleChain = null;
 	}
 
