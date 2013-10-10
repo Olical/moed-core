@@ -73,7 +73,7 @@ Input.prototype.fire = function (key) {
 Input.prototype._prepareForNextSection = function () {
 	var current = this._current;
 	current.keys = '';
-	current.type = _.last(current.matches).acceptsMapping;
+	current.type = _.last(current.matches).exact.acceptsMapping;
 };
 
 /**

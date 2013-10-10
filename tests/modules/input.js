@@ -88,3 +88,28 @@ test('passing a count to a mapping that does not take one will not execute', fun
 	i.fire('<w>');
 	t.end();
 });
+
+test('a command can be given another command', function (t) {
+	t.plan(1);
+	var engine = new MoedCore();
+	var i = engine.context.input;
+	var target = 'from <w> with love';
+	var result;
+
+	i.map('<d>', 'normal', 'command', {
+		acceptsMapping: 'motion',
+		target: function (count, next) {
+			result = next();
+		}
+	});
+
+	i.map('<w>', 'normal', 'motion', {
+		target: function () {
+			return target;
+		}
+	});
+
+	i.fire('<d>');
+	i.fire('<w>');
+	t.strictEqual(result, target, '<d> was passed the correct partially applied function');
+});
