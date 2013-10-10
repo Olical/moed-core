@@ -57,6 +57,10 @@ Input.prototype.fire = function (key) {
 
 		if (matches.exact.acceptsMapping) {
 			this._prepareForNextSection();
+
+			if (matches.possible.length === 0) {
+				this.fire(key);
+			}
 		}
 		else {
 			this._executeCurrentMapping();
@@ -117,6 +121,7 @@ Input.prototype._getMatchedMappings = function () {
 		},
 		parsed: parsed
 	};
+	var possibleChain;
 	var key;
 	var mapping;
 	var match;
@@ -129,12 +134,24 @@ Input.prototype._getMatchedMappings = function () {
 				result.possible[key] = mapping;
 				result.possible.length++;
 				match = key;
+
+				if (key === parsed.keys && mapping.acceptsMapping) {
+					possibleChain = mapping;
+				}
 			}
 		}
 	}
 
 	if (result.possible.length === 1 && parsed.keys === match) {
 		result.exact = result.possible[match];
+		current.possibleChain = null;
+	}
+	else if (result.possible.length > 1 && possibleChain) {
+		current.possibleChain = possibleChain;
+	}
+	else if (result.possible.length === 0 && current.possibleChain) {
+		result.exact = current.possibleChain;
+		current.possibleChain = null;
 	}
 
 	return result;

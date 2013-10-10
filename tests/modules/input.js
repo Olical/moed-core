@@ -113,3 +113,34 @@ test('a command can be given another command', function (t) {
 	i.fire('<w>');
 	t.strictEqual(result, target, '<d> was passed the correct partially applied function');
 });
+
+test('a command can be given another command even when ambiguous', function (t) {
+	t.plan(1);
+	var engine = new MoedCore();
+	var i = engine.context.input;
+	var target = 'from <w> with love';
+	var result;
+
+	i.map('<d>', 'normal', 'command', {
+		acceptsMapping: 'motion',
+		target: function (count, next) {
+			result = next();
+		}
+	});
+
+	i.map('<d><d>', 'normal', 'command', {
+		target: function () {
+			t.fail('should not execute');
+		}
+	});
+
+	i.map('<w>', 'normal', 'motion', {
+		target: function () {
+			return target;
+		}
+	});
+
+	i.fire('<d>');
+	i.fire('<w>');
+	t.strictEqual(result, target, '<d> was passed the correct partially applied function');
+});
