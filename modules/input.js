@@ -164,7 +164,7 @@ Input.prototype._getMatchedMappings = function () {
  *
  * @type {RegExp}
  */
-Input.prototype._keyExpression = /(\d*)((<\w+>)*)/;
+Input.prototype._keyExpression = /^(\d*)((<\w+>)*)$/;
 
 /**
  * Parses the current key string to extract the counts and actual keys.
