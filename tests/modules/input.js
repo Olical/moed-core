@@ -65,7 +65,7 @@ test('passing a count before a command will execute it with that count', functio
 	i.fire('<w>');
 });
 
-test('passing a count to a mapping tha does not take one will not execute', function (t) {
+test('passing a count to a mapping that does not take one will not execute', function (t) {
 	t.plan(0);
 	var engine = new MoedCore();
 	var i = engine.context.input;
