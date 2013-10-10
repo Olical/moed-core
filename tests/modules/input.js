@@ -144,3 +144,33 @@ test('a command can be given another command even when ambiguous', function (t) 
 	i.fire('<w>');
 	t.strictEqual(result, target, '<d> was passed the correct partially applied function');
 });
+
+test('a command can be given another command with counts', function (t) {
+	t.plan(1);
+	var engine = new MoedCore();
+	var i = engine.context.input;
+	var result;
+
+	i.map('<d>', 'normal', 'command', {
+		acceptsCount: true,
+		acceptsMapping: 'motion',
+		target: function (count, next) {
+			result = count + next();
+		}
+	});
+
+	i.map('<w>', 'normal', 'motion', {
+		acceptsCount: true,
+		target: function (count) {
+			return count;
+		}
+	});
+
+	i.fire('1');
+	i.fire('0');
+	i.fire('<d>');
+	i.fire('2');
+	i.fire('0');
+	i.fire('<w>');
+	t.strictEqual(result, 30, 'got the combined count');
+});
