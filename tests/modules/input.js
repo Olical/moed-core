@@ -174,3 +174,42 @@ test('a command can be given another command with counts', function (t) {
 	i.fire('<w>');
 	t.strictEqual(result, 30, 'got the combined count');
 });
+
+test('can chain triple commands', function (t) {
+	t.plan(1);
+	var engine = new MoedCore();
+	var i = engine.context.input;
+	var target = 'foobarbaz';
+	var result;
+
+	i.map('<d>', 'normal', 'command', {
+		acceptsMapping: 'motion',
+		target: function (count, next) {
+			result = 'foo' + next();
+		}
+	});
+
+	i.map('<d><d>', 'normal', 'command', {
+		target: function () {
+			t.fail('should not execute');
+		}
+	});
+
+	i.map('<a>', 'normal', 'motion', {
+		acceptsMapping: 'object',
+		target: function (count, next) {
+			return 'bar' + next();
+		}
+	});
+
+	i.map('<w>', 'normal', 'object', {
+		target: function () {
+			return 'baz';
+		}
+	});
+
+	i.fire('<d>');
+	i.fire('<a>');
+	i.fire('<w>');
+	t.strictEqual(result, target, 'all three mappings were executed and their values were combined');
+});
