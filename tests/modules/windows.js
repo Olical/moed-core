@@ -34,3 +34,10 @@ test('creating a window without a buffer will create a buffer automatically', fu
 	var win = this.w.create();
 	t.strictEqual(typeof win.buffer, 'object', 'the buffer was created');
 }.bind(setup()));
+
+test('can set the cursor position of a window', function (t) {
+	t.plan(2);
+	var win = this.w.create(null, 10, 5);
+	t.strictEqual(win.cursor.x, 10, 'x is correct');
+	t.strictEqual(win.cursor.y, 5, 'y is correct');
+}.bind(setup()));

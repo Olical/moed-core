@@ -14,17 +14,24 @@ function Windows(context) {
 }
 
 /**
- * Creates a new window with a buffer.
+ * Creates a new window with a buffer. You can also specify a default cursor
+ * position.
  *
  * @param {Object} [buffer] The buffer the window should point at. It will create a new buffer if you do not pass one.
+ * @param {Number} [x] Initial cursor column. Defaults to 0.
+ * @param {Number} [y] Initial cursor line. Defaults to 0.
  * @return {Object} The new window.
  */
-Windows.prototype.create = function (buffer) {
+Windows.prototype.create = function (buffer, x, y) {
 	var identifier = _.uniqueId('window_');
 
 	this._windows[identifier] = {
 		identifier: identifier,
-		buffer: buffer || this._context.buffers.create()
+		buffer: buffer || this._context.buffers.create(),
+		cursor: {
+			x: x || 0,
+			y: y || 0
+		}
 	};
 
 	return this._windows[identifier];
