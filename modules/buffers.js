@@ -21,10 +21,11 @@ Buffers.prototype.create = function (initialContent) {
 	var identifier = _.uniqueId('buffer_');
 
 	this._buffers[identifier] = {
-		lines: initialContent.split('\n')
+		identifier: identifier,
+		lines: (initialContent || '').split('\n')
 	};
 
-	return identifier;
+	return this._buffers[identifier];
 };
 
 /**
