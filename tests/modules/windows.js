@@ -1,33 +1,36 @@
 var test = require('tape');
 var MoedCore = require('../..');
 
+function setup() {
+	var engine = new MoedCore();
+
+	return {
+		engine: engine,
+		w: engine.context.windows,
+		b: engine.context.buffers
+	};
+}
+
 test('can create a window that contains a buffer', function (t) {
 	t.plan(1);
-	var engine = new MoedCore();
 	var file = 'Hello, World!';
-	var w = engine.context.windows;
-	var b = engine.context.buffers;
 
-	var buf = b.create(file);
-	var win = w.create(buf);
+	var buf = this.b.create(file);
+	var win = this.w.create(buf);
 
 	t.strictEqual(win.buffer.lines[0], file, 'window contained the buffer');
-});
+}.bind(setup()));
 
 test('can get by identifier', function (t) {
 	t.plan(1);
-	var engine = new MoedCore();
-	var w = engine.context.windows;
-	var win = w.create();
-	var result = w.get(win.identifier);
+	var win = this.w.create();
+	var result = this.w.get(win.identifier);
 
 	t.strictEqual(result, win, 'fetched the same window');
-});
+}.bind(setup()));
 
 test('creating a window without a buffer will create a buffer automatically', function (t) {
 	t.plan(1);
-	var engine = new MoedCore();
-	var w = engine.context.windows;
-	var win = w.create();
+	var win = this.w.create();
 	t.strictEqual(typeof win.buffer, 'object', 'the buffer was created');
-});
+}.bind(setup()));
