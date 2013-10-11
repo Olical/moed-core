@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 /**
  * Default set of commands. Can be mapped to keys.
  *
@@ -15,8 +17,12 @@ function Commands(context) {
  * @param {Object} position
  */
 Commands.prototype.moveCursor = function (win, position) {
-	win.cursor.x = position.x;
-	win.cursor.y = position.y;
+	var positive = _.partial(Math.max, 0);
+	var lines = win.buffer.lines;
+	var lineCount = lines.length - 1;
+
+	win.cursor.y = Math.min(positive(position.y), lineCount);
+	win.cursor.x = Math.min(positive(position.x), lines[win.cursor.y].length - 1);
 };
 
 module.exports = {
