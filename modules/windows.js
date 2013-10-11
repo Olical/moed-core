@@ -16,8 +16,8 @@ function Windows(context) {
 /**
  * Creates a new window with a buffer.
  *
- * @param {String} [buffer] The identifier for the buffer the window should point at. It will create a new buffer if you do not pass one.
- * @return {String} The identifier for the window.
+ * @param {Object} [buffer] The buffer the window should point at. It will create a new buffer if you do not pass one.
+ * @return {Object} The new window.
  */
 Windows.prototype.create = function (buffer) {
 	var identifier = _.uniqueId('window_');

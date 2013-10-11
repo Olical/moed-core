@@ -15,7 +15,7 @@ function Buffers(context) {
  * Creates a new buffer and returns it's identifier.
  *
  * @param {String} [initialContent] The default string to store within the buffer. Defaults to an empty string.
- * @return {String} The new buffers identifier.
+ * @return {Object} The new buffer.
  */
 Buffers.prototype.create = function (initialContent) {
 	var identifier = _.uniqueId('buffer_');
