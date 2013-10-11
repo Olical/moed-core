@@ -6,16 +6,26 @@ var vm = require('vm');
  * @class
  */
 function MoedCore() {
+	var modules = [
+		'events',
+		'settings',
+		'input',
+		'buffers',
+		'windows',
+		'commands'
+	];
+	var length = modules.length;
+	var i;
+	var module;
+
 	this.context = vm.createContext({
 		source: this.source.bind(this)
 	});
 
-	this.registerModule(require('./modules/events.js'));
-	this.registerModule(require('./modules/settings.js'));
-	this.registerModule(require('./modules/input.js'));
-	this.registerModule(require('./modules/buffers.js'));
-	this.registerModule(require('./modules/windows.js'));
-	this.registerModule(require('./modules/commands.js'));
+	for (i = 0; i < length; i++) {
+		module = require(['./modules/', modules[i], '.js'].join(''));
+		this.registerModule(module);
+	}
 }
 
 /**
