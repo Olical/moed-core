@@ -18,7 +18,7 @@ test('can move the cursor to the specified position', function (t) {
 	t.plan(2);
 	var position = {
 		x: 5,
-		y: 0
+		y: 2
 	};
 	this.c.moveCursor(this.win, position);
 	t.strictEqual(this.win.cursor.x, position.x, 'x is correct');
