@@ -14,36 +14,52 @@ function Locators(context) {
  * Moves the windows cursor left.
  *
  * @param {Object} win
+ * @return {Object} The character to the left.
  */
 Locators.prototype.left = function (win) {
-	win.cursor.x -= 1;
+	return {
+		x: win.cursor.x - 1,
+		y: win.cursor.y
+	};
 };
 
 /**
  * Moves the windows cursor right.
  *
  * @param {Object} win
+ * @return {Object} The character to the right.
  */
 Locators.prototype.right = function (win) {
-	win.cursor.x += 1;
+	return {
+		x: win.cursor.x + 1,
+		y: win.cursor.y
+	};
 };
 
 /**
  * Moves the windows cursor up.
  *
  * @param {Object} win
+ * @return {Object} The character above.
  */
 Locators.prototype.up = function (win) {
-	win.cursor.y -= 1;
+	return {
+		x: win.cursor.x,
+		y: win.cursor.y - 1
+	};
 };
 
 /**
  * Moves the windows cursor down.
  *
  * @param {Object} win
+ * @return {Object} The character below.
  */
 Locators.prototype.down = function (win) {
-	win.cursor.y += 1;
+	return {
+		x: win.cursor.x,
+		y: win.cursor.y + 1
+	};
 };
 
 module.exports = {
