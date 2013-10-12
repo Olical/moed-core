@@ -36,3 +36,9 @@ test('move left', function (t) {
 	var result = this.l.down(this.win, this.win.cursor);
 	t.strictEqual(result.y, 1, 'moved the cursor down');
 }.bind(setup()));
+
+test('can expand a locator', function (t) {
+	t.plan(1);
+	var result = this.l.expand(20, this.l.right, this.win);
+	t.strictEqual(result.x, 20, 'locator was expanded correctly');
+}.bind(setup()));

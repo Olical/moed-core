@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 /**
  * This module contains methods to locate certain items within a window. These
  * can be composed with commands and mappings to create ways of navigating and
@@ -9,6 +11,25 @@
 function Locators(context) {
 	this._context = context;
 }
+
+/**
+ * Expands a locator by iteratively executing it and passing it the previous
+ * result each time.
+ *
+ * @param {Number} count The amount of times it should be expanded.
+ * @param {Object} locator The locator to execute.
+ * @param {Object} win Window to execute on.
+ */
+Locators.prototype.expand = function (count, locator, win) {
+	var previous = win.cursor;
+	var partialLocator = _.partial(locator, win);
+
+	while (count--) {
+		previous = partialLocator(previous);
+	}
+
+	return previous;
+};
 
 /**
  * Moves the windows cursor left.
