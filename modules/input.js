@@ -50,16 +50,9 @@ Input.prototype.map = function (keys, mode, type, properties) {
  */
 Input.prototype.fire = function (key) {
 	var current = this._current;
-	var matches;
-
-	if (!this._numberExpression.test(key)) {
-		current.keys += this._wrapKey(key);
-	}
-	else {
-		current.keys += key;
-	}
-
-	matches = this._getMatchedMappings();
+	var isNumber = this._numberExpression.test(key);
+	current.keys += isNumber ? key : this._wrapKey(key);
+	var matches = this._getMatchedMappings();
 
 	if (matches.exact) {
 		current.matches.push(matches);
