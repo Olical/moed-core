@@ -28,6 +28,7 @@ Windows.prototype.create = function (buffer, x, y) {
 	this._windows[identifier] = {
 		identifier: identifier,
 		buffer: buffer || this._context.buffers.create(),
+		currentScroll: 0,
 		cursor: {
 			x: x || 0,
 			y: y || 0
