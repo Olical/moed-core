@@ -19,7 +19,7 @@ function Input(context) {
 /**
  * Maps a key combination.
  *
- * @param {String} keys Combination to trigger the mapping.
+ * @param {String[]} keys Combination to trigger the mapping.
  * @param {String} mode The input mode it is restricted to. (normal, for example)
  * @param {String} type The type of the mapping. (command or motion for example)
  * @param {Object} properties Base object to create the mapping with.
@@ -29,13 +29,14 @@ function Input(context) {
  */
 Input.prototype.map = function (keys, mode, type, properties) {
 	var mappings = this._getMappings(mode, type);
+	var flatKeys = this._flattenKeys(keys);
 	var acceptsCount = true;
 
 	if (properties.hasOwnProperty('acceptsCount')) {
 		acceptsCount = properties.acceptsCount;
 	}
 
-	mappings[keys] = {
+	mappings[flatKeys] = {
 		target: properties.target,
 		acceptsCount: acceptsCount,
 		acceptsMapping: properties.acceptsMapping || false
@@ -52,7 +53,7 @@ Input.prototype.fire = function (key) {
 	var matches;
 
 	if (!this._numberExpression.test(key)) {
-		current.keys += ['<', '>'].join(key);
+		current.keys += this._wrapKey(key);
 	}
 	else {
 		current.keys += key;
@@ -94,6 +95,28 @@ Input.prototype._keyExpression = /^(\d*)((<\w+>)*)$/;
  */
 Input.prototype._numberExpression = /^\d$/;
 
+/**
+ * Flattens an array of keys into a string.
+ *
+ * @param {String[]} keys Initial array of keys.
+ * @return {String} The flat representation.
+ */
+Input.prototype._flattenKeys = function (keys) {
+	return _.reduce(keys, function (result, key) {
+		return result + this._wrapKey(key);
+	}, '', this);
+};
+
+/**
+ * Wraps a key in the correct characters. This allows the regular expression to
+ * distinguish between keys when doing a hash map style lookup.
+ *
+ * @param {String} key
+ * @return {String}
+ */
+Input.prototype._wrapKey = function (key) {
+	return ['<', '>'].join(key);
+};
 
 /**
  * Prepares the current mapping for the next section.

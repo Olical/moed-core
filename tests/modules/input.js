@@ -13,13 +13,13 @@ function setup() {
 test('handling a key with an exact match executes the right function', function (t) {
 	t.plan(1);
 
-	this.i.map('<w>', 'normal', 'command', {
+	this.i.map(['w'], 'normal', 'command', {
 		target: function () {
 			t.pass('mapping routed through');
 		}
 	});
 
-	this.i.map('<b>', 'normal', 'command', {
+	this.i.map(['b'], 'normal', 'command', {
 		target: function () {
 			t.fail('mapping routed through when it should not');
 		}
@@ -31,19 +31,19 @@ test('handling a key with an exact match executes the right function', function 
 test('sending one key when there are other potential matches does not execute', function (t) {
 	t.plan(1);
 
-	this.i.map('<w>', 'normal', 'command', {
+	this.i.map(['w'], 'normal', 'command', {
 		target: function () {
 			t.fail('<w> should not execute, it is ambiguous');
 		}
 	});
 
-	this.i.map('<w><b>', 'normal', 'command', {
+	this.i.map(['w', 'b'], 'normal', 'command', {
 		target: function () {
 			t.pass('<w><b> should execute, it is an exact match');
 		}
 	});
 
-	this.i.map('<b>', 'normal', 'command', {
+	this.i.map(['b'], 'normal', 'command', {
 		target: function () {
 			t.fail('<b> should not execute, <b> is never used at the start of the combo');
 		}
@@ -56,7 +56,7 @@ test('sending one key when there are other potential matches does not execute', 
 test('passing a count before a command will execute it with that count', function (t) {
 	t.plan(1);
 
-	this.i.map('<w>', 'normal', 'command', {
+	this.i.map(['w'], 'normal', 'command', {
 		target: function (count) {
 			t.strictEqual(count, 105, 'the mapping was executed with the correct count');
 		}
@@ -72,14 +72,14 @@ test('passing a count to a mapping that does not take one will not execute', fun
 	t.plan(1);
 	var executed = false;
 
-	this.i.map('<w>', 'normal', 'command', {
+	this.i.map(['w'], 'normal', 'command', {
 		acceptsCount: false,
 		target: function () {
 			executed = true;
 		}
 	});
 
-	this.i.map('<b>', 'normal', 'command', {
+	this.i.map(['b'], 'normal', 'command', {
 		target: function () {
 			executed = true;
 		}
@@ -96,14 +96,14 @@ test('a command can be given another command', function (t) {
 	var target = 'from <w> with love';
 	var result;
 
-	this.i.map('<d>', 'normal', 'command', {
+	this.i.map(['d'], 'normal', 'command', {
 		acceptsMapping: 'motion',
 		target: function (count, next) {
 			result = next();
 		}
 	});
 
-	this.i.map('<w>', 'normal', 'motion', {
+	this.i.map(['w'], 'normal', 'motion', {
 		target: function () {
 			return target;
 		}
@@ -119,20 +119,20 @@ test('a command can be given another command even when ambiguous', function (t) 
 	var target = 'from <w> with love';
 	var result;
 
-	this.i.map('<d>', 'normal', 'command', {
+	this.i.map(['d'], 'normal', 'command', {
 		acceptsMapping: 'motion',
 		target: function (count, next) {
 			result = next();
 		}
 	});
 
-	this.i.map('<d><d>', 'normal', 'command', {
+	this.i.map(['d', 'd'], 'normal', 'command', {
 		target: function () {
 			t.fail('should not execute');
 		}
 	});
 
-	this.i.map('<w>', 'normal', 'motion', {
+	this.i.map(['w'], 'normal', 'motion', {
 		target: function () {
 			return target;
 		}
@@ -147,7 +147,7 @@ test('a command can be given another command with counts', function (t) {
 	t.plan(1);
 	var result;
 
-	this.i.map('<d>', 'normal', 'command', {
+	this.i.map(['d'], 'normal', 'command', {
 		acceptsCount: true,
 		acceptsMapping: 'motion',
 		target: function (count, next) {
@@ -155,7 +155,7 @@ test('a command can be given another command with counts', function (t) {
 		}
 	});
 
-	this.i.map('<w>', 'normal', 'motion', {
+	this.i.map(['w'], 'normal', 'motion', {
 		acceptsCount: true,
 		target: function (count) {
 			return count;
@@ -176,27 +176,27 @@ test('can chain triple commands', function (t) {
 	var target = 'foobarbaz';
 	var result;
 
-	this.i.map('<d>', 'normal', 'command', {
+	this.i.map(['d'], 'normal', 'command', {
 		acceptsMapping: 'motion',
 		target: function (count, next) {
 			result = 'foo' + next();
 		}
 	});
 
-	this.i.map('<d><d>', 'normal', 'command', {
+	this.i.map(['d', 'd'], 'normal', 'command', {
 		target: function () {
 			t.fail('should not execute');
 		}
 	});
 
-	this.i.map('<a>', 'normal', 'motion', {
+	this.i.map(['a'], 'normal', 'motion', {
 		acceptsMapping: 'object',
 		target: function (count, next) {
 			return 'bar' + next();
 		}
 	});
 
-	this.i.map('<w>', 'normal', 'object', {
+	this.i.map(['w'], 'normal', 'object', {
 		target: function () {
 			return 'baz';
 		}
