@@ -25,7 +25,7 @@ test('handling a key with an exact match executes the right function', function 
 		}
 	});
 
-	this.i.fire('<w>');
+	this.i.fire('w');
 }.bind(setup()));
 
 test('sending one key when there are other potential matches does not execute', function (t) {
@@ -49,8 +49,8 @@ test('sending one key when there are other potential matches does not execute', 
 		}
 	});
 
-	this.i.fire('<w>');
-	this.i.fire('<b>');
+	this.i.fire('w');
+	this.i.fire('b');
 }.bind(setup()));
 
 test('passing a count before a command will execute it with that count', function (t) {
@@ -65,7 +65,7 @@ test('passing a count before a command will execute it with that count', functio
 	this.i.fire('1');
 	this.i.fire('0');
 	this.i.fire('5');
-	this.i.fire('<w>');
+	this.i.fire('w');
 }.bind(setup()));
 
 test('passing a count to a mapping that does not take one will not execute', function (t) {
@@ -87,7 +87,7 @@ test('passing a count to a mapping that does not take one will not execute', fun
 
 	this.i.fire('1');
 	this.i.fire('0');
-	this.i.fire('<w>');
+	this.i.fire('w');
 	t.strictEqual(executed, false, 'no commands were executed');
 }.bind(setup()));
 
@@ -109,8 +109,8 @@ test('a command can be given another command', function (t) {
 		}
 	});
 
-	this.i.fire('<d>');
-	this.i.fire('<w>');
+	this.i.fire('d');
+	this.i.fire('w');
 	t.strictEqual(result, target, '<d> was passed the correct partially applied function');
 }.bind(setup()));
 
@@ -138,8 +138,8 @@ test('a command can be given another command even when ambiguous', function (t) 
 		}
 	});
 
-	this.i.fire('<d>');
-	this.i.fire('<w>');
+	this.i.fire('d');
+	this.i.fire('w');
 	t.strictEqual(result, target, '<d> was passed the correct partially applied function');
 }.bind(setup()));
 
@@ -164,10 +164,10 @@ test('a command can be given another command with counts', function (t) {
 
 	this.i.fire('1');
 	this.i.fire('0');
-	this.i.fire('<d>');
+	this.i.fire('d');
 	this.i.fire('2');
 	this.i.fire('0');
-	this.i.fire('<w>');
+	this.i.fire('w');
 	t.strictEqual(result, 30, 'got the combined count');
 }.bind(setup()));
 
@@ -202,8 +202,8 @@ test('can chain triple commands', function (t) {
 		}
 	});
 
-	this.i.fire('<d>');
-	this.i.fire('<a>');
-	this.i.fire('<w>');
+	this.i.fire('d');
+	this.i.fire('a');
+	this.i.fire('w');
 	t.strictEqual(result, target, 'all three mappings were executed and their values were combined');
 }.bind(setup()));

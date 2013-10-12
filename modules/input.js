@@ -49,8 +49,16 @@ Input.prototype.map = function (keys, mode, type, properties) {
  */
 Input.prototype.fire = function (key) {
 	var current = this._current;
-	current.keys += key;
-	var matches = this._getMatchedMappings();
+	var matches;
+
+	if (!this._numberExpression.test(key)) {
+		current.keys += ['<', '>'].join(key);
+	}
+	else {
+		current.keys += key;
+	}
+
+	matches = this._getMatchedMappings();
 
 	if (matches.exact) {
 		current.matches.push(matches);
@@ -70,6 +78,22 @@ Input.prototype.fire = function (key) {
 		this._clearCurrentMapping();
 	}
 };
+
+/**
+ * Precompiled regular expression that extracts the count and key string from a
+ * key combination.
+ *
+ * @type {RegExp}
+ */
+Input.prototype._keyExpression = /^(\d*)((<\w+>)*)$/;
+
+/**
+ * Precompiled regular expression that matches a digit.
+ *
+ * @type {RegExp}
+ */
+Input.prototype._numberExpression = /^\d$/;
+
 
 /**
  * Prepares the current mapping for the next section.
@@ -157,14 +181,6 @@ Input.prototype._getMatchedMappings = function () {
 
 	return result;
 };
-
-/**
- * Precompiled regular expression that extracts the count and key string from a
- * key combination.
- *
- * @type {RegExp}
- */
-Input.prototype._keyExpression = /^(\d*)((<\w+>)*)$/;
 
 /**
  * Parses the current key string to extract the counts and actual keys.
