@@ -1,5 +1,3 @@
-var _ = require('lodash');
-
 /**
  * This module contains methods to locate certain items within a window. These
  * can be composed with commands and mappings to create ways of navigating and
@@ -22,10 +20,9 @@ function Locators(context) {
  */
 Locators.prototype.expand = function (count, locator, win) {
 	var previous = win.cursor;
-	var partialLocator = _.partial(locator, win);
 
 	while (count--) {
-		previous = partialLocator(previous);
+		previous = locator(win, previous);
 	}
 
 	return previous;
