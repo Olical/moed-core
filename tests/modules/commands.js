@@ -14,7 +14,7 @@ function setup() {
 		engine: engine,
 		c: engine.context.commands,
 		s: s,
-		win: win // :D
+		win: win
 	};
 }
 
