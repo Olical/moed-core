@@ -14,12 +14,13 @@ function Locators(context) {
  * Moves the windows cursor left.
  *
  * @param {Object} win
+ * @param {Object} current The current position.
  * @return {Object} The character to the left.
  */
-Locators.prototype.left = function (win) {
+Locators.prototype.left = function (win, current) {
 	return {
-		x: win.cursor.x - 1,
-		y: win.cursor.y
+		x: current.x - 1,
+		y: current.y
 	};
 };
 
@@ -27,12 +28,13 @@ Locators.prototype.left = function (win) {
  * Moves the windows cursor right.
  *
  * @param {Object} win
+ * @param {Object} current The current position.
  * @return {Object} The character to the right.
  */
-Locators.prototype.right = function (win) {
+Locators.prototype.right = function (win, current) {
 	return {
-		x: win.cursor.x + 1,
-		y: win.cursor.y
+		x: current.x + 1,
+		y: current.y
 	};
 };
 
@@ -40,12 +42,13 @@ Locators.prototype.right = function (win) {
  * Moves the windows cursor up.
  *
  * @param {Object} win
+ * @param {Object} current The current position.
  * @return {Object} The character above.
  */
-Locators.prototype.up = function (win) {
+Locators.prototype.up = function (win, current) {
 	return {
-		x: win.cursor.x,
-		y: win.cursor.y - 1
+		x: current.x,
+		y: current.y - 1
 	};
 };
 
@@ -53,12 +56,13 @@ Locators.prototype.up = function (win) {
  * Moves the windows cursor down.
  *
  * @param {Object} win
+ * @param {Object} current The current position.
  * @return {Object} The character below.
  */
-Locators.prototype.down = function (win) {
+Locators.prototype.down = function (win, current) {
 	return {
-		x: win.cursor.x,
-		y: win.cursor.y + 1
+		x: current.x,
+		y: current.y + 1
 	};
 };
 

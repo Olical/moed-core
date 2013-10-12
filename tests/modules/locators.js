@@ -15,24 +15,24 @@ function setup() {
 
 test('move left', function (t) {
 	t.plan(1);
-	var result = this.l.left(this.win);
+	var result = this.l.left(this.win, this.win.cursor);
 	t.strictEqual(result.x, -1, 'moved the cursor left');
 }.bind(setup()));
 
 test('move right', function (t) {
 	t.plan(1);
-	var result = this.l.right(this.win);
+	var result = this.l.right(this.win, this.win.cursor);
 	t.strictEqual(result.x, 1, 'moved the cursor right');
 }.bind(setup()));
 
 test('move up', function (t) {
 	t.plan(1);
-	var result = this.l.up(this.win);
+	var result = this.l.up(this.win, this.win.cursor);
 	t.strictEqual(result.y, -1, 'moved the cursor up');
 }.bind(setup()));
 
 test('move left', function (t) {
 	t.plan(1);
-	var result = this.l.down(this.win);
+	var result = this.l.down(this.win, this.win.cursor);
 	t.strictEqual(result.y, 1, 'moved the cursor down');
 }.bind(setup()));
