@@ -62,3 +62,17 @@ test('setting a value emits events', function (t) {
 
 	this.s.set('foo', 100);
 }.bind(setup()));
+
+test('can fetch a setting for multiple targets', function (t) {
+	t.plan(3);
+	var targets = ['window.window_XX', 'language.javascript'];
+
+	this.s.set('foo', 10);
+	t.strictEqual(this.s.get('foo', targets), 10, 'default matched');
+
+	this.s.set('foo', 20, targets[1]);
+	t.strictEqual(this.s.get('foo', targets), 20, 'language matched');
+
+	this.s.set('foo', 30, targets[0]);
+	t.strictEqual(this.s.get('foo', targets), 30, 'window matched');
+}.bind(setup()));

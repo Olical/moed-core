@@ -14,18 +14,40 @@ function Settings(context) {
 /**
  * Fetches a key from the settings with an optional target context.
  *
+ * If you pass an array for the target value, it will check all of the targets
+ * from left to right. The final one it checks will be "default". It will
+ * return the value of the first match.
+ *
  * @param {String} key Dot delimited object path for the setting.
- * @param {String} [target] Optional context for the setting, defaults to "default".
+ * @param {String|String[]} [target] Optional context for the setting, defaults to "default". Can also take an array to check.
+ * @param {Boolean} [useDefault] If the target is a string and this is true, it will not fall through to "default". Defaults to true.
  * @return {*} Either the matched value or undefined if not found.
  */
-Settings.prototype.get = function (key, target) {
-	var settings = this._resolveTarget(target);
+Settings.prototype.get = function (key, target, useDefault) {
+	if (target instanceof Array) {
+		var length = target.length;
+		var i;
+		var result;
 
-	if (typeof settings[key] === 'undefined' && target !== 'default') {
-		settings = this._resolveTarget('default');
+		for (i = 0; i < length; i++) {
+			result = this.get(key, target[i], false);
+
+			if (typeof result !== 'undefined') {
+				return result;
+			}
+		}
+
+		return this.get(key);
 	}
+	else {
+		var settings = this._resolveTarget(target);
 
-	return settings[key];
+		if (typeof settings[key] === 'undefined' && target !== 'default' && useDefault !== false) {
+			settings = this._resolveTarget('default');
+		}
+
+		return settings[key];
+	}
 };
 
 /**
