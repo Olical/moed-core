@@ -11,5 +11,9 @@ function setup() {
 	};
 }
 
-test('can define and mark a simple region', test(t) {
-}.bind(setup()));
+// test('can define and mark a simple region', test(t) {
+// 	t.plan(1);
+// 	r.define('world', /World!/);
+// 	var regions = r.match('Hello, World! Sup world?');
+// 	t.strictEqual(regions.length, 1, 'matched one region');
+// }.bind(setup()));
