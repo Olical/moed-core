@@ -6,7 +6,8 @@ function setup() {
 
 	return {
 		engine: engine,
-		i: engine.context.input
+		i: engine.context.input,
+		s: engine.context.settings
 	};
 }
 
@@ -206,4 +207,30 @@ test('can chain triple commands', function (t) {
 	this.i.fire('a');
 	this.i.fire('w');
 	t.strictEqual(result, target, 'all three mappings were executed and their values were combined');
+}.bind(setup()));
+
+test('changing the mode through a binding will reset the current mapping', function (t) {
+	t.plan(1);
+
+	this.i.map(['d', 'd'], 'normal', 'command', {
+		target: function () {
+			t.fail('this should not have been executed');
+		}
+	});
+
+	this.i.map(['d'], 'normal', 'command', {
+		target: function () {
+			t.fail('this should not have been executed');
+		}
+	});
+
+	this.i.map(['d'], 'not-normal', 'command', {
+		target: function () {
+			t.ok('this should be execute');
+		}
+	});
+
+	this.i.fire('d');
+	this.s.set('input.mode', 'not-normal');
+	this.i.fire('d');
 }.bind(setup()));
