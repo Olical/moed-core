@@ -58,3 +58,18 @@ test('can destroy a buffer', function (t) {
 
 	t.strictEqual(typeof this.b.get(id), 'undefined', 'buffer was destroyed');
 }.bind(setup()));
+
+test('destroying a buffer emits an event', function (t) {
+	t.plan(1);
+	var buffer = this.b.create();
+	var id = buffer.identifier;
+
+	this.e.addListener([
+		'buffers.destroy',
+		id
+	].join('#'), function () {
+		t.pass('buffer was destroyed, event was fired');
+	});
+
+	this.b.destroy(id);
+}.bind(setup()));

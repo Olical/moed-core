@@ -47,6 +47,7 @@ Buffers.prototype.get = function (identifier) {
  */
 Buffers.prototype.destroy = function (identifier) {
 	delete this._buffers[identifier];
+	this._context.events.emitScopedEvent('buffers.destroy', identifier);
 };
 
 module.exports = {
