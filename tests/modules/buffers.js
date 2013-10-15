@@ -6,7 +6,8 @@ function setup() {
 
 	return {
 		engine: engine,
-		b: engine.context.buffers
+		b: engine.context.buffers,
+		e: engine.context.events
 	};
 }
 
@@ -32,4 +33,16 @@ test('can get by identifier', function (t) {
 	var result = this.b.get(buffer.identifier);
 
 	t.strictEqual(result, buffer, 'fetched the same buffer');
+}.bind(setup()));
+
+test('emits a creation event', function (t) {
+	t.plan(2);
+	var content = 'Hello, World!';
+
+	this.e.addListener('buffers.create', function (buffer, identifier) {
+		t.strictEqual(buffer.lines[0], content, 'content is correct');
+		t.strictEqual(buffer.identifier, identifier, 'identifier was passed');
+	});
+
+	this.b.create(content);
 }.bind(setup()));

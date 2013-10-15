@@ -19,13 +19,15 @@ function Buffers(context) {
  */
 Buffers.prototype.create = function (initialContent) {
 	var identifier = _.uniqueId('buffer_');
-
-	this._buffers[identifier] = {
+	var buffer = {
 		identifier: identifier,
 		lines: (initialContent || '').split('\n')
 	};
 
-	return this._buffers[identifier];
+	this._buffers[identifier] = buffer;
+	this._context.events.emitEvent('buffers.create', [buffer, identifier]);
+
+	return buffer;
 };
 
 /**
