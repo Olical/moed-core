@@ -88,6 +88,10 @@ Events.prototype.removeListener = function (event, listener) {
 
 	if (listeners) {
 		listeners.splice(listeners.indexOf(listener), 1);
+
+		if (listeners.length === 0) {
+			delete this._events[event];
+		}
 	}
 };
 
