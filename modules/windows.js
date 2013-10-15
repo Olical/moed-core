@@ -24,8 +24,7 @@ function Windows(context) {
  */
 Windows.prototype.create = function (buffer, x, y) {
 	var identifier = _.uniqueId('window_');
-
-	this._windows[identifier] = {
+	var win = {
 		identifier: identifier,
 		buffer: buffer || this._context.buffers.create(),
 		currentScroll: 0,
@@ -35,7 +34,10 @@ Windows.prototype.create = function (buffer, x, y) {
 		}
 	};
 
-	return this._windows[identifier];
+	this._windows[identifier] = win;
+	this._context.events.emitScopedEvent('windows.create', win.buffer.identifier, [win, identifier]);
+
+	return win;
 };
 
 /**
