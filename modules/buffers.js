@@ -50,6 +50,15 @@ Buffers.prototype.destroy = function (identifier) {
 	this._context.events.emitScopedEvent('buffers.destroy', identifier);
 };
 
+/**
+ * Returns an array of all current buffer identifiers.
+ *
+ * @return {String[]} The complete buffer identifier list.
+ */
+Buffers.prototype.getIdentifiers = function () {
+	return Object.keys(this._buffers);
+};
+
 module.exports = {
 	register: function (context) {
 		context.buffers = new Buffers(context);

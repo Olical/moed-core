@@ -73,3 +73,11 @@ test('destroying a buffer emits an event', function (t) {
 
 	this.b.destroy(id);
 }.bind(setup()));
+
+test('can fetch all buffer identifiers', function (t) {
+	t.plan(1);
+	var buffer = this.b.create();
+	var id = buffer.identifier;
+	var identifiers = this.b.getIdentifiers();
+	t.strictEqual(identifiers[1], id, 'identifiers list contains buffer identifier');
+}.bind(setup()));
