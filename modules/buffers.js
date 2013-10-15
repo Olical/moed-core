@@ -40,6 +40,15 @@ Buffers.prototype.get = function (identifier) {
 	return this._buffers[identifier];
 };
 
+/**
+ * Destroys the buffer that matches the identifier.
+ *
+ * @param {String} identifier Buffer to destroy.
+ */
+Buffers.prototype.destroy = function (identifier) {
+	delete this._buffers[identifier];
+};
+
 module.exports = {
 	register: function (context) {
 		context.buffers = new Buffers(context);

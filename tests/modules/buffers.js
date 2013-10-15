@@ -46,3 +46,15 @@ test('emits a creation event', function (t) {
 
 	this.b.create(content);
 }.bind(setup()));
+
+test('can destroy a buffer', function (t) {
+	t.plan(2);
+	var buffer = this.b.create();
+	var id = buffer.identifier;
+
+	t.strictEqual(this.b.get(id), buffer, 'currently exists');
+
+	this.b.destroy(id);
+
+	t.strictEqual(typeof this.b.get(id), 'undefined', 'buffer was destroyed');
+}.bind(setup()));
