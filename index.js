@@ -13,8 +13,7 @@ function MoedCore() {
 		'buffers',
 		'windows',
 		'commands',
-		'locators',
-		'regions'
+		'locators'
 	];
 	var length = modules.length;
 	var i;
