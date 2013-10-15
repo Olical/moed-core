@@ -54,6 +54,8 @@ Input.prototype.fire = function (key) {
 	current.keys += isNumber ? key : this._wrapKey(key);
 	var matches = this._getMatchedMappings();
 
+	this._context.events.emitScopedEvent('input.fire', key);
+
 	if (matches.exact) {
 		current.matches.push(matches);
 
@@ -70,6 +72,7 @@ Input.prototype.fire = function (key) {
 	}
 	else if (matches.possible.length === 0) {
 		this._clearCurrentMapping();
+		this._context.events.emitEvent('input.fire.noMatches');
 	}
 };
 

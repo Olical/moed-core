@@ -7,7 +7,8 @@ function setup() {
 	return {
 		engine: engine,
 		i: engine.context.input,
-		s: engine.context.settings
+		s: engine.context.settings,
+		e: engine.context.events
 	};
 }
 
@@ -233,4 +234,31 @@ test('changing the mode through a binding will reset the current mapping', funct
 	this.i.fire('d');
 	this.s.set('input.mode', 'not-normal');
 	this.i.fire('d');
+}.bind(setup()));
+
+test('event is emitted when any input is fired', function (t) {
+	t.plan(2);
+
+	this.e.addListener('input.fire', function (key) {
+		t.strictEqual(key, 'a', 'key was passed through');
+	});
+
+	this.e.addListener([
+		'input.fire',
+		'a'
+	].join('#'), function () {
+		t.pass('scoped event was also fired');
+	});
+
+	this.i.fire('a');
+}.bind(setup()));
+
+test('event is emitted when no matches are found', function (t) {
+	t.plan(1);
+
+	this.e.addListener('input.fire.noMatches', function () {
+		t.pass('the input.fire.noMatches event was emitted');
+	});
+
+	this.i.fire('a');
 }.bind(setup()));
