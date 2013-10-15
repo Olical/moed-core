@@ -5,6 +5,7 @@
  * @class
  */
 function Events(context) {
+	this._context = context;
 	this._events = {};
 }
 
