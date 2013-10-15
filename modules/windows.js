@@ -57,6 +57,7 @@ Windows.prototype.get = function (identifier) {
  */
 Windows.prototype.destroy = function (identifier) {
 	delete this._windows[identifier];
+	this._context.events.emitScopedEvent('windows.destroy', identifier);
 };
 
 module.exports = {

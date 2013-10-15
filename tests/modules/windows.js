@@ -75,3 +75,18 @@ test('can destroy a window', function (t) {
 
 	t.strictEqual(typeof this.w.get(id), 'undefined', 'window was destroyed');
 }.bind(setup()));
+
+test('destroying a window emits an event', function (t) {
+	t.plan(1);
+	var win = this.w.create();
+	var id = win.identifier;
+
+	this.e.addListener([
+		'windows.destroy',
+		id
+	].join('#'), function () {
+		t.pass('window was destroyed and event was fired');
+	});
+
+	this.w.destroy(id);
+}.bind(setup()));
