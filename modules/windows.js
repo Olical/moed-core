@@ -60,6 +60,15 @@ Windows.prototype.destroy = function (identifier) {
 	this._context.events.emitScopedEvent('windows.destroy', identifier);
 };
 
+/**
+ * Returns the array of current window identifiers.
+ *
+ * @return {String[]} All window identifiers.
+ */
+Windows.prototype.getIdentifiers = function () {
+	return Object.keys(this._windows);
+};
+
 module.exports = {
 	register: function (context) {
 		context.windows = new Windows(context);

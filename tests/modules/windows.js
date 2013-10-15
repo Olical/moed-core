@@ -90,3 +90,11 @@ test('destroying a window emits an event', function (t) {
 
 	this.w.destroy(id);
 }.bind(setup()));
+
+test('can fetch all window identifiers', function (t) {
+	t.plan(1);
+	var win = this.w.create();
+	var id = win.identifier;
+	var identifiers = this.w.getIdentifiers();
+	t.strictEqual(identifiers[1], id, 'identifiers list contains window identifier');
+}.bind(setup()));
