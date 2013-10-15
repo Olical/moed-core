@@ -63,3 +63,15 @@ test('event is fired on create, contains buffer identifier, window and window id
 
 	this.w.create(buffer);
 }.bind(setup()));
+
+test('can destroy a window', function (t) {
+	t.plan(2);
+	var win = this.w.create();
+	var id = win.identifier;
+
+	t.strictEqual(this.w.get(id), win, 'window currently exists');
+
+	this.w.destroy(id);
+
+	t.strictEqual(typeof this.w.get(id), 'undefined', 'window was destroyed');
+}.bind(setup()));

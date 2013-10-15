@@ -50,6 +50,15 @@ Windows.prototype.get = function (identifier) {
 	return this._windows[identifier];
 };
 
+/**
+ * Destroys a window with a matching identifier.
+ *
+ * @param {String} identifier The window to destroy.
+ */
+Windows.prototype.destroy = function (identifier) {
+	delete this._windows[identifier];
+};
+
 module.exports = {
 	register: function (context) {
 		context.windows = new Windows(context);
