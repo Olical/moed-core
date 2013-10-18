@@ -4,7 +4,7 @@ var MoedCore = require('../..');
 function setup() {
 	var engine = new MoedCore();
 	var l  = engine.context.locators;
-	var win = engine.context.settings.get('windows.current');
+	var win = engine.context.windows.create();
 
 	return {
 		engine: engine,

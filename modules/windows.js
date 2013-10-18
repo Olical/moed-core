@@ -10,7 +10,6 @@ var _ = require('lodash');
 function Windows(context) {
 	this._context = context;
 	this._windows = {};
-	context.settings.set('windows.current', this.create());
 }
 
 /**

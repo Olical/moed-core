@@ -96,5 +96,5 @@ test('can fetch all window identifiers', function (t) {
 	var win = this.w.create();
 	var id = win.identifier;
 	var identifiers = this.w.getIdentifiers();
-	t.strictEqual(identifiers[1], id, 'identifiers list contains window identifier');
+	t.strictEqual(identifiers[0], id, 'identifiers list contains window identifier');
 }.bind(setup()));

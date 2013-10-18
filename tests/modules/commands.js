@@ -4,7 +4,7 @@ var MoedCore = require('../..');
 function setup() {
 	var engine = new MoedCore();
 	var s = engine.context.settings;
-	var win = s.get('windows.current');
+	var win = engine.context.windows.create();
 	win.buffer.lines = [
 		'Hello, World!',
 		'How are you?'
