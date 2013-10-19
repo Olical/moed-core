@@ -9,6 +9,7 @@ var _ = require('lodash');
 function Buffers(context) {
 	this._context = context;
 	this._buffers = {};
+	this._context.settings.set('lineBreakCharacter', '\n');
 }
 
 /**
@@ -19,9 +20,10 @@ function Buffers(context) {
  */
 Buffers.prototype.create = function (initialContent) {
 	var identifier = _.uniqueId('buffer_');
+	var lineBreakCharacter = this._context.settings.get('lineBreakCharacter');
 	var buffer = {
 		identifier: identifier,
-		lines: (initialContent || '').split('\n')
+		lines: (initialContent || '').split(lineBreakCharacter)
 	};
 
 	this._buffers[identifier] = buffer;
