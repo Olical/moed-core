@@ -4,7 +4,7 @@ var MoedCore = require('..');
 test('can load a module', function (t) {
 	t.plan(1);
 	var engine = new MoedCore();
-	engine.registerModule(require('./stubs/basic-module.js'));
+	engine.registerModule(require('./data/basic-module.js'));
 	t.strictEqual(engine.context.main.id, true, 'loaded and created the module');
 });
 
