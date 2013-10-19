@@ -82,7 +82,7 @@ Input.prototype.fire = function (key) {
  *
  * @type {RegExp}
  */
-Input.prototype._keyExpression = /^(\d*)((<\w+>)*)$/;
+Input.prototype._keyExpression = /^(\d*)((<\D+>)*)$/;
 
 /**
  * Precompiled regular expression that matches a digit.
