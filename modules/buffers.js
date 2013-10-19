@@ -43,6 +43,21 @@ Buffers.prototype.get = function (identifier) {
 };
 
 /**
+ * Fetches the full content for a buffer.
+ *
+ * @param {String} identifier Identification key for your desired buffer.
+ * @return {String} The full joined contents of the buffer (not it's lines).
+ */
+Buffers.prototype.getContent = function (identifier) {
+	var buffer = this.get(identifier);
+	var lineBreakCharacter = this._context.settings.get('lineBreakCharacter');
+
+	if (buffer) {
+		return buffer.lines.join(lineBreakCharacter);
+	}
+};
+
+/**
  * Destroys the buffer that matches the identifier.
  *
  * @param {String} identifier Buffer to destroy.
