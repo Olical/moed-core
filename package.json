@@ -6,6 +6,10 @@
 	"scripts": {
 		"test": "tape tests/*.js tests/**/*.js"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/Wolfy87/moed-core.git"
+	},
 	"keywords": [
 		"vi",
 		"modal",
